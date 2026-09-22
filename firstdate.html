@@ -11,14 +11,18 @@
       box-sizing: border-box;
     }
 
-    body {
+    html, body {
       margin: 0;
-      min-height: 100vh;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #ff758c, #ff7eb3);
       color: white;
     }
@@ -28,20 +32,25 @@
       max-width: 420px;
       padding: 40px 25px;
       text-align: center;
-      background: rgba(255,255,255,0.16);
+      background: rgba(255, 255, 255, 0.16);
       border-radius: 25px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
       backdrop-filter: blur(10px);
     }
 
     .heart {
       font-size: 65px;
-      animation: beat 1s infinite alternate;
+      animation: heartbeat 0.8s infinite alternate;
     }
 
-    @keyframes beat {
-      from { transform: scale(1); }
-      to { transform: scale(1.15); }
+    @keyframes heartbeat {
+      from {
+        transform: scale(1);
+      }
+
+      to {
+        transform: scale(1.18);
+      }
     }
 
     h1 {
@@ -50,52 +59,64 @@
     }
 
     p {
+      font-size: 17px;
       opacity: 0.9;
       margin-bottom: 35px;
     }
 
     .buttons {
       position: relative;
-      height: 120px;
+      height: 100px;
     }
 
     button {
       border: none;
       border-radius: 50px;
-      padding: 16px 34px;
+      padding: 16px 32px;
       font-size: 18px;
       font-weight: bold;
       cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
     }
 
     #yes {
+      position: absolute;
+      left: 15px;
+      top: 20px;
+
       background: white;
       color: #ff477e;
-      position: absolute;
-      left: 20px;
-      top: 20px;
+
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
     #no {
+      position: absolute;
+      right: 15px;
+      top: 20px;
+
       background: #333;
       color: white;
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      transition: left 0.12s, top 0.12s;
+
+      z-index: 9999;
+
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
 
     #result {
       display: none;
     }
 
-    #result h1 {
-      font-size: 35px;
+    .kiss {
+      font-size: 90px;
     }
 
-    .kiss {
-      font-size: 80px;
+    #result h1 {
+      font-size: 36px;
     }
+
   </style>
 </head>
 
@@ -105,19 +126,136 @@
 
     <div class="heart">❤️</div>
 
-    <h1>Would you kiss me on our first date?</h1>
+    <h1>
+      Would you kiss me<br>
+      on our first date?
+    </h1>
 
-    <p>Choose carefully... 😏</p>
+    <p>
+      Choose carefully... 😏
+    </p>
 
     <div class="buttons">
-      <button id="yes">YES ❤️</button>
-      <button id="no">NO 😜</button>
+
+      <button id="yes">
+        YES ❤️
+      </button>
+
+      <button id="no">
+        NO 😜
+      </button>
+
     </div>
 
   </div>
 
+
   <div class="card" id="result">
 
-    <div class="kiss">💋</div>
+    <div class="kiss">
+      💋
+    </div>
 
-    <h1
+    <h1>
+      I knew it 😏❤️
+    </h1>
+
+    <p>
+      Now I'm definitely looking forward to our first date.
+    </p>
+
+  </div>
+
+
+  <script>
+
+    const noButton = document.getElementById("no");
+    const yesButton = document.getElementById("yes");
+
+    function moveNo(event) {
+
+      if (event) {
+        event.preventDefault();
+      }
+
+      const padding = 20;
+
+      const buttonWidth = noButton.offsetWidth;
+      const buttonHeight = noButton.offsetHeight;
+
+      const maxX =
+        window.innerWidth -
+        buttonWidth -
+        padding;
+
+      const maxY =
+        window.innerHeight -
+        buttonHeight -
+        padding;
+
+      const randomX =
+        Math.floor(
+          Math.random() *
+          (maxX - padding)
+        ) + padding;
+
+      const randomY =
+        Math.floor(
+          Math.random() *
+          (maxY - padding)
+        ) + padding;
+
+      noButton.style.position = "fixed";
+
+      noButton.style.left =
+        randomX + "px";
+
+      noButton.style.top =
+        randomY + "px";
+
+      noButton.style.right = "auto";
+      noButton.style.bottom = "auto";
+    }
+
+
+    /* MOBILE + COMPUTER */
+
+    noButton.addEventListener(
+      "pointerdown",
+      moveNo
+    );
+
+    noButton.addEventListener(
+      "mouseenter",
+      moveNo
+    );
+
+    noButton.addEventListener(
+      "click",
+      moveNo
+    );
+
+
+    /* YES BUTTON */
+
+    yesButton.addEventListener(
+      "click",
+      function() {
+
+        document
+          .getElementById("question")
+          .style.display = "none";
+
+        noButton.style.display = "none";
+
+        document
+          .getElementById("result")
+          .style.display = "block";
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
